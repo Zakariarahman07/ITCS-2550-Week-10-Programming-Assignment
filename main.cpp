@@ -199,7 +199,7 @@ class LinkedList {
                     newNode->link = nullptr;
 
                     last->link = newNode; // Linking the last node to the new node
-                    last = newNode; // Updating the last pointer to the new node;\
+                    last = newNode; // Updating the last pointer to the new node;
                     current = current->link;
                 }
             }
@@ -258,7 +258,7 @@ class UnorderedLinkedList : public LinkedList<Type>
             nodeType<Type> *current = this->first;
             nodeType<Type> *trailCurrent = nullptr;
 
-            if (current-> info == deleteItem){
+            if (current->info == deleteItem){
                 this->first = current->link;
 
                 if (this->first == nullptr){
