@@ -3,20 +3,21 @@ Author: Zakaria Rahman
 
 Date: March 29, 2026
 Description: This program collects user inputs and validates if they enter the correct input.
-             Also, it demonstrates file handling by writing to a file. Additionally, it shows the usage 
-             of selection statements like if else statements and switch case statements. Furthermore, 
+             Also, it demonstrates file handling by writing to a file. Additionally, it shows the usage
+             of selection statements like if else statements and switch case statements. Furthermore,
              it also demonstrates the use of repetition structures such as the for loop, do...while loop,
              and while loop, and use of user defined functions. It also demonstrates the use of Arrays and Enumerations.
-             This program also shows the useage of data structures like struct. 
+             This program also shows the useage of data structures like struct.
              Finally, it incorporates object-oriented programming concepts including classes, inheritance, and composition.
              Additionally, it shows the use of virtual functions and polymorphism. It also shows the use of pointers and dynamic memory allocation.
-             This program also shows use of class templates and operator overloading. The program also shows exception handling. 
-             This program also shows the use of recursion in programming. 
+             This program also shows use of class templates and operator overloading. The program also shows exception handling.
+             This program also shows the use of recursion in programming.
              New: Use of vectors, implementation of sequential search, bubble sort, and binary search.
              New: Use of linked lists using class templates.
 Course: ITCS 2550 (C++ Programming 2)
 */
 
+#define RUN_TESTS
 
 // header files
 #include <iostream>
@@ -53,530 +54,638 @@ struct nodeType
 template <class Type>
 class LinkedListIterator
 {
-    private:
-        nodeType<Type> *current; // Pointer to the current node
-    
-    public:
-        // Constructor
-        LinkedListIterator(){
-            current = nullptr; // Default
-        }
-        LinkedListIterator(nodeType<Type> *ptr) {
-            current = ptr; // Parameterized
-        }
-        // Accessing the value of current node
-        Type& operator*(){
-            return current->info;
-        }
-        // Advancing to the next node
-        LinkedListIterator<Type> operator++(){
-            current = current->link;
-            return *this;
-        }
+private:
+    nodeType<Type> *current; // Pointer to the current node
 
-        // Checking if two iterators are equal
-        bool operator==(const LinkedListIterator<Type>& other) const {
-            return (current == other.current);
-        }
-        // Checking if two iterators are not equal
-        bool operator!=(const LinkedListIterator<Type>& other) const {
-            return (current != other.current);
-        }   
+public:
+    // Constructor
+    LinkedListIterator(){
+        current = nullptr; // Default
+    }
+    LinkedListIterator(nodeType<Type> *ptr) {
+        current = ptr; // Parameterized
+    }
+    // Accessing the value of current node
+    Type& operator*(){
+        return current->info;
+    }
+    // Advancing to the next node
+    LinkedListIterator<Type> operator++(){
+        current = current->link;
+        return *this;
+    }
+
+    // Checking if two iterators are equal
+    bool operator==(const LinkedListIterator<Type>& other) const {
+        return (current == other.current);
+    }
+    // Checking if two iterators are not equal
+    bool operator!=(const LinkedListIterator<Type>& other) const {
+        return (current != other.current);
+    }
 };
 
 // Linked List Class Template
 template <class Type>
 class LinkedList {
-    protected:
-        nodeType<Type> *first; // Pointer to the first node
-        nodeType<Type> *last; // Pointer to the last node
-        int count; // Number of nodes in the list
-    
-    public:
-        const LinkedList<Type>& operator=(const LinkedList<Type>& otherList) {
-            if (this != &otherList) {
-                copyList(otherList);
-            }
-            return *this;
-        }
-        // Empty List
-        void initializeList() {
-            destroyList();
-        }
+protected:
+    nodeType<Type> *first; // Pointer to the first node
+    nodeType<Type> *last; // Pointer to the last node
+    int count; // Number of nodes in the list
 
-        // Check if the list is empty
-        bool isEmptyList() const {
-            return (first == nullptr);
-        }
-
-        // Number of nodes in the list
-        int length() const {
-            return count;
-        }
-
-        // Returns an iterator to the first node
-        LinkedListIterator<Type> begin() const {
-            return LinkedListIterator<Type>(first);
-        }
-        // Return an iterator to the last node
-        LinkedListIterator<Type> end() const {
-            return LinkedListIterator<Type>(nullptr);
-        }
-
-        // Print the list element by element using iterators
-        void print() const {
-            for (LinkedListIterator<Type> iterator = begin(); iterator != end(); ++iterator){
-                cout << *iterator << " ";
-            }
-            cout << endl;
-        }
-        // Destroying the list
-        void destroyList(){
-            nodeType<Type> *temp;
-
-            while (first != nullptr) {
-                temp = first;
-                first = first->link;
-                delete temp;
-            }
-            last = nullptr;
-            count = 0;
-        }
-
-        // Constructor
-        LinkedList() {
-            first = nullptr;
-            last = nullptr;
-            count = 0;
-        }
-        // Copy Constructor
-        LinkedList(const LinkedList<Type>& otherList){
-            first = nullptr;
+public:
+    const LinkedList<Type>& operator=(const LinkedList<Type>& otherList) {
+        if (this != &otherList) {
             copyList(otherList);
         }
-        // Destructor
-        ~LinkedList(){
+        return *this;
+    }
+    // Empty List
+    void initializeList() {
+        destroyList();
+    }
+
+    // Check if the list is empty
+    bool isEmptyList() const {
+        return (first == nullptr);
+    }
+
+    // Number of nodes in the list
+    int length() const {
+        return count;
+    }
+
+    // Returns an iterator to the first node
+    LinkedListIterator<Type> begin() const {
+        return LinkedListIterator<Type>(first);
+    }
+    // Return an iterator to the last node
+    LinkedListIterator<Type> end() const {
+        return LinkedListIterator<Type>(nullptr);
+    }
+
+    // Print the list element by element using iterators
+    void print() const {
+        for (LinkedListIterator<Type> iterator = begin(); iterator != end(); ++iterator){
+            cout << *iterator << " ";
+        }
+        cout << endl;
+    }
+    // Destroying the list
+    void destroyList(){
+        nodeType<Type> *temp;
+
+        while (first != nullptr) {
+            temp = first;
+            first = first->link;
+            delete temp;
+        }
+        last = nullptr;
+        count = 0;
+    }
+
+    // Constructor
+    LinkedList() {
+        first = nullptr;
+        last = nullptr;
+        count = 0;
+    }
+    // Copy Constructor
+    LinkedList(const LinkedList<Type>& otherList){
+        first = nullptr;
+        copyList(otherList);
+    }
+    // Destructor
+    ~LinkedList(){
+        destroyList();
+    }
+
+    // Search, insert, and delete functions prototypes
+    // Virtual Functions as they will be overriden by unordered derived class
+
+    virtual bool search(const Type& searchItem) const = 0;
+    virtual void insertFirst(const Type& newItem) = 0;
+    virtual void insertLast(const Type& newItem) = 0;
+    virtual void deleteNode(const Type& deleteItem) = 0;
+
+private:
+    // Copy List Function
+    void copyList(const LinkedList<Type>& otherList){
+        nodeType<Type>* newNode; // Pointer to create a new node
+        nodeType<Type>* current; // Pointer to traverse the list
+
+        if (first != nullptr){
             destroyList();
         }
-        
-        // Search, insert, and delete functions prototypes
-        // Virtual Functions as they will be overriden by unordered derived class
 
-        virtual bool search(const Type& searchItem) const = 0;
-        virtual void insertFirst(const Type& newItem) = 0;
-        virtual void insertLast(const Type& newItem) = 0;
-        virtual void deleteNode(const Type& deleteItem) = 0;
-    
-    private:
-        // Copy List Function
-        void copyList(const LinkedList<Type>& otherList){
-            nodeType<Type>* newNode; // Pointer to create a new node
-            nodeType<Type>* current; // Pointer to traverse the list
+        if (otherList.first == nullptr){
+            first = nullptr;
+            last = nullptr;
+            count = 0;
+        }
+        else{
+            current = otherList.first;
+            count = otherList.count;
 
-            if (first != nullptr){
-                destroyList();
-            }
+            first = new nodeType<Type>;
+            first->info = current->info;
+            first->link = nullptr;
+            last = first;
 
-            if (otherList.first == nullptr){
-                first = nullptr;
-                last = nullptr;
-                count = 0;
-            } 
-            else{
-                current = otherList.first;
-                count = otherList.count;
+            current = current->link;
 
-                first = new nodeType<Type>;
-                first->info = current->info;
-                first->link = nullptr;
-                last = first;
+            while (current != nullptr) {
+                newNode = new nodeType<Type>;
+                newNode->info = current->info;
+                newNode->link = nullptr;
 
+                last->link = newNode; // Linking the last node to the new node
+                last = newNode; // Updating the last pointer to the new node;
                 current = current->link;
-
-                while (current != nullptr) {
-                    newNode = new nodeType<Type>;
-                    newNode->info = current->info;
-                    newNode->link = nullptr;
-
-                    last->link = newNode; // Linking the last node to the new node
-                    last = newNode; // Updating the last pointer to the new node;
-                    current = current->link;
-                }
             }
         }
+    }
 };
 
 // Unordered Linked List Class Template
 template <class Type>
 class UnorderedLinkedList : public LinkedList<Type>
 {
-    public:
-        bool search(const Type& searchItem) const {
-            nodeType<Type> *current = this->first; // first node
+public:
+    bool search(const Type& searchItem) const {
+        nodeType<Type> *current = this->first; // first node
 
-            while (current != nullptr){
-                if (current->info == searchItem){
-                    return true;
-                }
-                current = current->link;
+        while (current != nullptr){
+            if (current->info == searchItem){
+                return true;
             }
-            return false;
+            current = current->link;
         }
+        return false;
+    }
 
-        void insertFirst(const Type& newItem){
-            nodeType<Type> *newNode = new nodeType<Type>;
-            newNode->info = newItem;
-            newNode->link = this->first;
+    void insertFirst(const Type& newItem){
+        nodeType<Type> *newNode = new nodeType<Type>;
+        newNode->info = newItem;
+        newNode->link = this->first;
 
+        this->first = newNode;
+        this->count++;
+        if (this->last == nullptr){
+            this->last = newNode;
+        }
+    }
+
+    void insertLast(const Type& newItem){
+        nodeType<Type>* newNode = new nodeType<Type>;
+        newNode->info = newItem;
+        newNode->link = nullptr;
+
+        if (this->first == nullptr){
             this->first = newNode;
-            this->count++;
-            if (this->last == nullptr){
-                this->last = newNode;
-            }
+            this->last = newNode;
+        } else {
+            this->last->link = newNode;
+            this->last = newNode;
+        }
+        this->count++;
+    }
+
+    void deleteNode(const Type& deleteItem){
+        if (this-> first == nullptr){
+            cout << "Cannot delete from an empty list." << endl;
         }
 
-        void insertLast(const Type& newItem){
-            nodeType<Type>* newNode = new nodeType<Type>;
-            newNode->info = newItem;
-            newNode->link = nullptr;
+        nodeType<Type> *current = this->first;
+        nodeType<Type> *trailCurrent = nullptr;
+
+        if (current->info == deleteItem){
+            this->first = current->link;
 
             if (this->first == nullptr){
-                this->first = newNode;
-                this->last = newNode;
-            } else {
-                this->last->link = newNode;
-                this->last = newNode;
-            }
-            this->count++;
-        }
-
-        void deleteNode(const Type& deleteItem){
-            if (this-> first == nullptr){
-                cout << "Cannot delete from an empty list." << endl;
-            }
-
-            nodeType<Type> *current = this->first;
-            nodeType<Type> *trailCurrent = nullptr;
-
-            if (current->info == deleteItem){
-                this->first = current->link;
-
-                if (this->first == nullptr){
-                    this->last = nullptr;
-                }
-                delete current;
-                this->count--;
-                return;
-            }
-
-            while (current != nullptr && current->info != deleteItem){
-                trailCurrent = current;
-                current = current->link;
-            }
-
-            if (current == nullptr){
-                cout << "Item not found in the list." << endl;
-                return;
-            }
-
-            trailCurrent->link = current->link;
-            if (current == this->last){
-                this->last = trailCurrent;
+                this->last = nullptr;
             }
             delete current;
             this->count--;
+            return;
         }
+
+        while (current != nullptr && current->info != deleteItem){
+            trailCurrent = current;
+            current = current->link;
+        }
+
+        if (current == nullptr){
+            cout << "Item not found in the list." << endl;
+            return;
+        }
+
+        trailCurrent->link = current->link;
+        if (current == this->last){
+            this->last = trailCurrent;
+        }
+        delete current;
+        this->count--;
+    }
+};
+
+// Stacks Using Array
+template <class Type>
+class Stack {
+private:
+    Type* arr;
+    int topIndex;
+    int capacity;
+
+public:
+    Stack(int size = 10) {
+        capacity = size;
+        arr = new Type[capacity];
+        topIndex = -1;
+    }
+
+    ~Stack() {
+        delete[] arr;
+    }
+
+    bool isEmpty() const {
+        return topIndex == -1;
+    }
+
+    bool isFull() const {
+        return topIndex == capacity - 1;
+    }
+
+    void push(const Type& item) {
+        if (isFull()) {
+            throw overflow_error("Stack overflow");
+        }
+        arr[++topIndex] = item;
+    }
+
+    void pop() {
+        if (isEmpty()) {
+            throw underflow_error("Stack underflow");
+        }
+        topIndex--;
+    }
+
+    Type top() const {
+        if (isEmpty()) {
+            throw underflow_error("Stack is empty");
+        }
+        return arr[topIndex];
+    }
+};
+
+// Queues using Linked Lists
+template <class Type>
+class Queue {
+private:
+    nodeType<Type>* frontPtr;
+    nodeType<Type>* rearPtr;
+
+public:
+    Queue() {
+        frontPtr = rearPtr = nullptr;
+    }
+
+    ~Queue() {
+        while (!isEmpty()) {
+            dequeue();
+        }
+    }
+
+    bool isEmpty() const {
+        return frontPtr == nullptr;
+    }
+
+    void enqueue(const Type& item) {
+        nodeType<Type>* newNode = new nodeType<Type>;
+        newNode->info = item;
+        newNode->link = nullptr;
+
+        if (rearPtr == nullptr) {
+            frontPtr = rearPtr = newNode;
+        }
+        else {
+            rearPtr->link = newNode;
+            rearPtr = newNode;
+        }
+    }
+
+    void dequeue() {
+        if (isEmpty()) {
+            throw underflow_error("Queue is empty");
+        }
+
+        nodeType<Type>* temp = frontPtr;
+        frontPtr = frontPtr->link;
+
+        if (frontPtr == nullptr) {
+            rearPtr = nullptr;
+        }
+
+        delete temp;
+    }
+
+    Type front() const {
+        if (isEmpty()) {
+            throw underflow_error("Queue is empty");
+        }
+        return frontPtr->info;
+    }
 };
 
 // Base Class (Abstract Class)
 class Person {
     // Private Members
-    private:
-        string lastName;
-        string firstName;
-        int age;
+private:
+    string lastName;
+    string firstName;
+    int age;
     // Protected Members
-    protected:
-        happinessLevelLife happinessLevel;
+protected:
+    happinessLevelLife happinessLevel;
     // Public Members
-    public:
-        // Default Constructor
-        Person(){
-            lastName = " ";
-            firstName = " ";
-            age = 0;
-            happinessLevel = NEUTRAL;
-        }
-        // Parameterized Constructor
-        Person(string lName, string fName, int a, happinessLevelLife hLevel);
+public:
+    // Default Constructor
+    Person(){
+        lastName = " ";
+        firstName = " ";
+        age = 0;
+        happinessLevel = NEUTRAL;
+    }
+    // Parameterized Constructor
+    Person(string lName, string fName, int a, happinessLevelLife hLevel);
 
-        // Virtual Destructor
-        virtual ~Person(){}
+    // Virtual Destructor
+    virtual ~Person(){}
 
-        // Setter Functions
-        void setPersonalInformation(string lName, string fName, int a, happinessLevelLife hLevel);
+    // Setter Functions
+    void setPersonalInformation(string lName, string fName, int a, happinessLevelLife hLevel);
 
-        // Getter Functions
-        string getLastName() const{
-            return lastName;
-        }
-        string getFirstName() const {
-            return firstName;
-        }
-        int getAge() const {
-            return age;
-        }
-        happinessLevelLife getHappinessLevel() const {
-            return happinessLevel;
-        }
-        
-        // Virtual Print Function
-        virtual void print() const;
+    // Getter Functions
+    string getLastName() const{
+        return lastName;
+    }
+    string getFirstName() const {
+        return firstName;
+    }
+    int getAge() const {
+        return age;
+    }
+    happinessLevelLife getHappinessLevel() const {
+        return happinessLevel;
+    }
 
-        // Pure Virtual Function
-        virtual string getSubject() const = 0;
+    // Virtual Print Function
+    virtual void print() const;
 
-        // Virtual Function for using << operator overloading
-        virtual void  toStream(ostream& COUT) const {
-            COUT << "My name is " << firstName << " " << lastName << " and I am " << age << " years old.";
-        }
+    // Pure Virtual Function
+    virtual string getSubject() const = 0;
+
+    // Virtual Function for using << operator overloading
+    virtual void  toStream(ostream& COUT) const {
+        COUT << "My name is " << firstName << " " << lastName << " and I am " << age << " years old.";
+    }
 
 };
 // Composition Class Date
 class Date {
     // Private Members
-    private:
-        int day;
-        int month;
-        int year;
+private:
+    int day;
+    int month;
+    int year;
     // Public Members
-    public:
-        // Default Constrcutor
-        Date() {
+public:
+    // Default Constrcutor
+    Date() {
+        day = 1;
+        month = 1;
+        year = 2000;
+    }
+    // Parameterized Constructor
+    Date(int d, int m, int y) {
+        if (d >=1 && d <= 31){
+            day = d;
+        } else {
             day = 1;
+        }
+        if (m >=1 && m <= 12) {
+            month = m;
+        } else {
             month = 1;
-            year = 2000;
         }
-        // Parameterized Constructor
-        Date(int d, int m, int y) {
-            if (d >=1 && d <= 31){
-                day = d;
-            } else {
-                day = 1;
-            }
-            if (m >=1 && m <= 12) {
-                month = m;
-            } else {
-                month = 1;
-            }
-            year = y;
+        year = y;
+    }
+    // Setter Function
+    void setDate(int d, int m, int y) {
+        if (d >=1 && d <= 31){
+            day = d;
+        } else {
+            day = 1;
         }
-        // Setter Function
-        void setDate(int d, int m, int y) {
-            if (d >=1 && d <= 31){
-                day = d;
-            } else {
-                day = 1;
-            }
-            if (m >=1 && m <= 12) {
-                month = m;
-            } else {
-                month = 1;
-            }
-            year = y;
+        if (m >=1 && m <= 12) {
+            month = m;
+        } else {
+            month = 1;
         }
-        // Getter Functions
-        int getDay() const {
-            return day;
-        }
-        int getMonth() const {
-            return month;
-        }
-        int getYear() const {
-            return year;
-        }
+        year = y;
+    }
+    // Getter Functions
+    int getDay() const {
+        return day;
+    }
+    int getMonth() const {
+        return month;
+    }
+    int getYear() const {
+        return year;
+    }
 
-        // Format Date Function
-        void formateDate() const {
-            cout << right << setfill('0') << setw(2) << month << "/" << setfill('0') << setw(2) << day << "/" << year << endl;
-        }
+    // Format Date Function
+    void formateDate() const {
+        cout << right << setfill('0') << setw(2) << month << "/" << setfill('0') << setw(2) << day << "/" << year << endl;
+    }
 
 };
 
 // Derived Class Student
 class Student:public Person {
     // Private Members
-    private:
-        string studentID;
-        char studentGrade;
-        int studentTestScore;
-        string majorName;
-        // Creating a vector for storing a student's multiple test scores for a semester
-        vector<int> vectStudentTestScores;
+private:
+    string studentID;
+    char studentGrade;
+    int studentTestScore;
+    string majorName;
+    // Creating a vector for storing a student's multiple test scores for a semester
+    vector<int> vectStudentTestScores;
     // Public Members
-    public:
-        // Default Constructor
-        Student():Person() {
-            studentID = " ";
-            studentGrade = ' ';
-            studentTestScore = 0;
-            majorName = " ";
-        }
-        // Parameterized Constructor
-        Student(string lName, string fName, int a, happinessLevelLife hLevel, string sID, char sGrade, int sTestScore, string sMajorName):Person(lName, fName, a, hLevel) {
-            studentID = sID;
-            studentGrade = sGrade;
-            studentTestScore = sTestScore;
-            majorName = sMajorName;
-        }
-        // Setter Function
-        void setStudentInformation(string lName, string fName, int a, happinessLevelLife hLevel, string sID, char sGrade, int sTestScore, string sMajorName) {
-            Person::setPersonalInformation(lName, fName, a, hLevel);
-            studentID = sID;
-            studentGrade = sGrade;
-            studentTestScore = sTestScore;
-            majorName = sMajorName;
-        }
-        // Getter Functions
-        string getStudentID() const {
-            return studentID;
-        }
-        char getStudentGrade() const {
-            return studentGrade;
-        }
-        int getStudentTestScore() const {
-            return studentTestScore;
-        }
-        int getScoreAt(int index) const {
-            return vectStudentTestScores.at(index);
-        }
-        int getNumberOfScores() const {
-            return static_cast<int>(vectStudentTestScores.size());
-        }
-        // Overriding the pure virtual function from the base class
-        string getSubject() const {
-            return majorName;
-        }
+public:
+    // Default Constructor
+    Student():Person() {
+        studentID = " ";
+        studentGrade = ' ';
+        studentTestScore = 0;
+        majorName = " ";
+    }
+    // Parameterized Constructor
+    Student(string lName, string fName, int a, happinessLevelLife hLevel, string sID, char sGrade, int sTestScore, string sMajorName):Person(lName, fName, a, hLevel) {
+        studentID = sID;
+        studentGrade = sGrade;
+        studentTestScore = sTestScore;
+        majorName = sMajorName;
+    }
+    // Setter Function
+    void setStudentInformation(string lName, string fName, int a, happinessLevelLife hLevel, string sID, char sGrade, int sTestScore, string sMajorName) {
+        Person::setPersonalInformation(lName, fName, a, hLevel);
+        studentID = sID;
+        studentGrade = sGrade;
+        studentTestScore = sTestScore;
+        majorName = sMajorName;
+    }
+    // Getter Functions
+    string getStudentID() const {
+        return studentID;
+    }
+    char getStudentGrade() const {
+        return studentGrade;
+    }
+    int getStudentTestScore() const {
+        return studentTestScore;
+    }
+    int getScoreAt(int index) const {
+        return vectStudentTestScores.at(index);
+    }
+    int getNumberOfScores() const {
+        return static_cast<int>(vectStudentTestScores.size());
+    }
+    // Overriding the pure virtual function from the base class
+    string getSubject() const {
+        return majorName;
+    }
 
-        // Functionality for the vector
-        // Adding an element to the vector object
-        void addTestScores(int testScore) {
-            vectStudentTestScores.push_back(testScore);
-        }
+    // Functionality for the vector
+    // Adding an element to the vector object
+    void addTestScores(int testScore) {
+        vectStudentTestScores.push_back(testScore);
+    }
 
-        // For multiple test score addition in the vector
-        void addMultipleScores(){
-            int elementScore;
-            int numberOfTestScores;
-            cout << "Enter the number of scores you want to add: ";
-            cin >> numberOfTestScores;
+    // For multiple test score addition in the vector
+    void addMultipleScores(){
+        int elementScore;
+        int numberOfTestScores;
+        cout << "Enter the number of scores you want to add: ";
+        cin >> numberOfTestScores;
 
-            //From GeeksForGeeks Website (https://www.geeksforgeeks.org/cpp/std-vector-reserve-in-cpp-stl/)
-            vectStudentTestScores.reserve(numberOfTestScores);
-            for (int i = 0; i < numberOfTestScores; i++) {
-                cout << "Enter Score " << i + 1 << endl;
-                cin >> elementScore;
-                vectStudentTestScores.push_back(elementScore);
-            }
+        //From GeeksForGeeks Website (https://www.geeksforgeeks.org/cpp/std-vector-reserve-in-cpp-stl/)
+        vectStudentTestScores.reserve(numberOfTestScores);
+        for (int i = 0; i < numberOfTestScores; i++) {
+            cout << "Enter Score " << i + 1 << endl;
+            cin >> elementScore;
+            vectStudentTestScores.push_back(elementScore);
         }
-        // Overriding the virtual function for using << operator overloading
-        void toStream(ostream& COUT) const {
-            Person::toStream(COUT);
-            COUT << " I am a student and my major is " << majorName << "." << endl;
-        }
-        
-        // Feedback Function
-        string getFeedback() const;
-        // Print Function
-        void print() const;
+    }
+    // Overriding the virtual function for using << operator overloading
+    void toStream(ostream& COUT) const {
+        Person::toStream(COUT);
+        COUT << " I am a student and my major is " << majorName << "." << endl;
+    }
 
-        // Bubble Sort, Liner Search, Binary Search Functions Prototype;
-        void bubbleSortScores();
-        int linearSearchScores(int keyScore) const;
-        int binarySearchScores(int keyScore);
+    // Feedback Function
+    string getFeedback() const;
+    // Print Function
+    void print() const;
+
+    // Bubble Sort, Liner Search, Binary Search Functions Prototype;
+    void bubbleSortScores();
+    int linearSearchScores(int keyScore) const;
+    int binarySearchScores(int keyScore);
 };
 
 // Derived Class Teacher
 class Teacher:public Person {
     // Private Members
-    private:
-        string teachingSubject;
-        Date hireDate;
+private:
+    string teachingSubject;
+    Date hireDate;
     // Public Members
-    public:
-        // Default Constructor
-        Teacher():Person() {
-            teachingSubject = " ";
-            hireDate = Date();
-        }
-        // Parameterized Constructor
-        Teacher(string lName, string fName, int a, happinessLevelLife hLevel, string teachingSubject, int d, int m, int y):Person(lName, fName, a, hLevel), hireDate(d, m, y) {
-            // Using this pointer to differentiate between the parameter and class member variables with same name
-            // When object is created, a 'this' pointer is automatically invoked.
-            this->teachingSubject = teachingSubject;
-        }
+public:
+    // Default Constructor
+    Teacher():Person() {
+        teachingSubject = " ";
+        hireDate = Date();
+    }
+    // Parameterized Constructor
+    Teacher(string lName, string fName, int a, happinessLevelLife hLevel, string teachingSubject, int d, int m, int y):Person(lName, fName, a, hLevel), hireDate(d, m, y) {
+        // Using this pointer to differentiate between the parameter and class member variables with same name
+        // When object is created, a 'this' pointer is automatically invoked.
+        this->teachingSubject = teachingSubject;
+    }
 
-        // Setter Function
-        void setTeacherInformation(string lName, string fName, int a, happinessLevelLife hLevel, string tSubject, int d, int m, int y) {
-            Person::setPersonalInformation(lName, fName, a, hLevel);
-            hireDate.setDate(d,m,y);
-            teachingSubject = tSubject;
-        }
-        // Getter Function
-        Date getHireDate() const {
-            return hireDate;
-        }
-        // Overriding the pure virtual function from the base class
-        string getSubject() const {
-            return teachingSubject;
-        }
+    // Setter Function
+    void setTeacherInformation(string lName, string fName, int a, happinessLevelLife hLevel, string tSubject, int d, int m, int y) {
+        Person::setPersonalInformation(lName, fName, a, hLevel);
+        hireDate.setDate(d,m,y);
+        teachingSubject = tSubject;
+    }
+    // Getter Function
+    Date getHireDate() const {
+        return hireDate;
+    }
+    // Overriding the pure virtual function from the base class
+    string getSubject() const {
+        return teachingSubject;
+    }
 
-        // Print Function
-        void print() const {
-            Person::print();
-            cout << "Teaching Subject: " << teachingSubject << endl;
-            cout << "Hire Date: ";
-            hireDate.formateDate();
-            cout << endl;
-        }
+    // Print Function
+    void print() const {
+        Person::print();
+        cout << "Teaching Subject: " << teachingSubject << endl;
+        cout << "Hire Date: ";
+        hireDate.formateDate();
+        cout << endl;
+    }
 
-        //  Overriding the virual function for using << operator overloading
-        void toStream(ostream& COUT) const {
-            Person::toStream(COUT);
-            COUT << " I am a teacher and I teach " << teachingSubject << "." << endl;
-        }
+    //  Overriding the virual function for using << operator overloading
+    void toStream(ostream& COUT) const {
+        Person::toStream(COUT);
+        COUT << " I am a teacher and I teach " << teachingSubject << "." << endl;
+    }
 
-        // Overloading == operator for derived Teacher class
-        bool operator==(const Teacher& other) const {
-            return (teachingSubject == other.teachingSubject); // Two teacher from same department are considered equal
-        }
-        // Overloading != operator
-        bool operator!=(const Teacher& other) const {
-            return !(*this == other);
-        }
+    // Overloading == operator for derived Teacher class
+    bool operator==(const Teacher& other) const {
+        return (teachingSubject == other.teachingSubject); // Two teacher from same department are considered equal
+    }
+    // Overloading != operator
+    bool operator!=(const Teacher& other) const {
+        return !(*this == other);
+    }
 
-        // Using recursion to calculate experience of a teacher in years
-        int calculateYearsOfExperience(int currentYear) const {
-            try {
-                if (currentYear < hireDate.getYear()){
-                    throw invalid_argument("Current year cannot be less than the hire year.");
-                }
-                int hireYear = hireDate.getYear();
-                // Base Case
-                if (currentYear == hireYear){
-                    return 0;
-                }
-                // General Case
-                // Calling the function (directly recursion)
-                else {
-                    return 1 + calculateYearsOfExperience(currentYear - 1);
-                }
+    // Using recursion to calculate experience of a teacher in years
+    int calculateYearsOfExperience(int currentYear) const {
+        try {
+            if (currentYear < hireDate.getYear()){
+                throw invalid_argument("Current year cannot be less than the hire year.");
             }
-            catch (const invalid_argument& ex) {
-                cout << "Exception Caught: " << ex.what() << endl;
+            int hireYear = hireDate.getYear();
+            // Base Case
+            if (currentYear == hireYear){
                 return 0;
             }
-        }   
+            // General Case
+            // Calling the function (directly recursion)
+            else {
+                return 1 + calculateYearsOfExperience(currentYear - 1);
+            }
+        }
+        catch (const invalid_argument& ex) {
+            cout << "Exception Caught: " << ex.what() << endl;
+            return 0;
+        }
+    }
 };
 
 // Non Member Function for Overloading << operator for the classes
@@ -588,138 +697,152 @@ ostream& operator<<(ostream& COUT, const Person& person) {
 // Class Template for Dynamic Array Logic
 template <class Type>
 class DynamicArray {
-    private:
-        Type** array;
-        int currentSize;
-        int maxSize;
+private:
+    Type** array;
+    int currentSize;
+    int maxSize;
 
-    public:
-        // Default Constructor
-        DynamicArray(int size = 10) {
-            maxSize = size;
-            currentSize = 0;
-            array = new Type*[maxSize];
+public:
+    // Default Constructor
+    DynamicArray(int size = 10) {
+        maxSize = size;
+        currentSize = 0;
+        array = new Type*[maxSize];
+    }
+    // Destructor
+    ~DynamicArray() {
+        for (int i = 0; i < currentSize; i++) {
+            delete array[i];
         }
-        // Destructor
-        ~DynamicArray() {
+        delete[] array;
+    }
+    // Overload the += operator to add an element to the dynamic array
+    void operator+=(Type* element) {
+        if (currentSize == maxSize) {
+            int newCapacity = maxSize + 1;
+            Type** newArray = new Type*[newCapacity];
+
             for (int i = 0; i < currentSize; i++) {
-                delete array[i];
+                newArray[i] = array[i];
             }
             delete[] array;
+            array = newArray;
+            maxSize = newCapacity;
         }
-        // Overload the += operator to add an element to the dynamic array
-        void operator+=(Type* element) {
-            if (currentSize == maxSize) {
-                int newCapacity = maxSize + 1;
-                Type** newArray = new Type*[newCapacity];
+        array[currentSize] = element;
+        currentSize++;
+    }
 
-                for (int i = 0; i < currentSize; i++) {
-                    newArray[i] = array[i];
-                }
-                delete[] array;
-                array = newArray;
-                maxSize = newCapacity;
-            }
-            array[currentSize] = element;
-            currentSize++;
+    // Overload the -= operator to remove an element from the dynamic array
+    void operator-=(int index) {
+
+        if (index < 0 || index >= currentSize) {
+            throw out_of_range("Invalid index for removal");
         }
-
-        // Overload the -= operator to remove an element from the dynamic array
-        void operator-=(int index) {
-
-            if (index < 0 || index >= currentSize) {
-                throw out_of_range("Invalid index for removal");
-            }
-            delete array[index];
-            // Continuous Memory Allocation
-            for (int i = index; i < currentSize -1; i++) {
-                array[i] = array[i + 1];
-            }
-            // The last pointer component is set to nullptr after shifting
-            array[currentSize - 1] = nullptr; // Safer Approach
-            currentSize--;
+        delete array[index];
+        // Continuous Memory Allocation
+        for (int i = index; i < currentSize -1; i++) {
+            array[i] = array[i + 1];
         }
+        // The last pointer component is set to nullptr after shifting
+        array[currentSize - 1] = nullptr; // Safer Approach
+        currentSize--;
+    }
 
-        // Overload the [] operator to access an element at a specific index
-        // Exception Handling for invalid or out of bounds index
-        const Type* operator[] (int index) const{
-            // If the index is out of bounds, we throw an exception
-            if (index < 0 || index >= currentSize) {
-                throw out_of_range("Index out of bounds");
-            }
-            return array[index];
+    // Overload the [] operator to access an element at a specific index
+    // Exception Handling for invalid or out of bounds index
+    const Type* operator[] (int index) const{
+        // If the index is out of bounds, we throw an exception
+        if (index < 0 || index >= currentSize) {
+            throw out_of_range("Index out of bounds");
         }
+        return array[index];
+    }
 
-        // Getters
-        int getCurrentSize() const {
-            return currentSize;
-        }
+    // Getters
+    int getCurrentSize() const {
+        return currentSize;
+    }
 };
 
 // Manager Class (Owns a dynamic array of Person's pointers)
 class School {
     // Private Members
-    private:
-        // Calling an instance of the class template
-        DynamicArray<Person> people;
+private:
+    // Calling an instance of the class template
+    DynamicArray<Person> people;
     // Public Members
-    public:
-        // Default Constructor
-        School():people(10) {
-            // Initializing the dynamic array with size of 10
-        }
-        // Adding a Person (Student or Teacher) to the School
-        void addPerson(Person* p) {
-            people += p; // Using the overload += operator to add a person pointer
-        }
+public:
+    // Default Constructor
+    School():people(10) {
+        // Initializing the dynamic array with size of 10
+    }
+    // Adding a Person (Student or Teacher) to the School
+    void addPerson(Person* p) {
+        people += p; // Using the overload += operator to add a person pointer
+    }
 
-        // Removing a Person from school
-        void removePerson(int index) {
+    // Removing a Person from school
+    void removePerson(int index) {
+        try {
+            people -= index; // Using the overload -= operator to remove a person pointer
+        }
+        catch (const out_of_range& ex) {
+            cout << "Error: " << ex.what() << endl;
+        }
+    }
+
+    // Accessing a Person at a specific index
+    const Person* getPerson(int index) const {
+        try {
+            return people[index]; // Using the overload [] operator
+        }
+        catch (const out_of_range& ex) {
+            cout << "Error: " << ex.what() << endl;
+            return nullptr;
+        }
+    }
+
+    // Print All People in the School Polymorphically
+    void printAllPeople() const {
+        for (int i = 0; i < people.getCurrentSize(); i++) {
             try {
-                people -= index; // Using the overload -= operator to remove a person pointer
+                people[i]->print();
             }
             catch (const out_of_range& ex) {
-                cout << "Error: " << ex.what() << endl;
+                cout << "Error printing the person at index " << i << ": " << ex.what() << endl;
             }
         }
+    }
 
-        // Accessing a Person at a specific index
-        const Person* getPerson(int index) const {
-            try {
-                return people[index]; // Using the overload [] operator
-            }
-            catch (const out_of_range& ex) {
-                cout << "Error: " << ex.what() << endl;
-                return nullptr;
-            }
+    void processPeopleQueue() {
+        Queue<const Person*> q;
+
+        for (int i = 0; i < people.getCurrentSize(); i++) {
+            q.enqueue(people[i]);
         }
 
-        // Print All People in the School Polymorphically
-        void printAllPeople() const {
-            for (int i = 0; i < people.getCurrentSize(); i++) {
-                try {
-                    people[i]->print();
-                }
-                catch (const out_of_range& ex) {
-                    cout << "Error printing the person at index " << i << ": " << ex.what() << endl;
-                }
-            }
+        cout << "\nProcessing people using Queue:\n";
+        while (!q.isEmpty()) {
+            const Person* p = q.front();
+            p->print();
+            q.dequeue();
         }
-
+    }
 };
 
 // Exception Class for Invalid Difficulty Level in the Quiz
 // Inherits from the Exception Class
 class InvalidDifficultyLevelException: public exception {
-    private:
-        string message;
-    public:
-        InvalidDifficultyLevelException(string message){
-            this->message = message;
-        }
-        const char* what() const noexcept {
-            return message.c_str();
-        }
+private:
+    string message;
+public:
+    InvalidDifficultyLevelException(string message){
+        this->message = message;
+    }
+    const char* what() const noexcept {
+        return message.c_str();
+    }
 };
 
 
@@ -731,9 +854,9 @@ T findMax(T a, T b, T c)
     if (a >=b && a >= c) {
         return a;
     }
-     else if (b >= a && b >= c) {
+    else if (b >= a && b >= c) {
         return b;
-    } 
+    }
     else {
         return c;
     }
@@ -783,14 +906,14 @@ void displayStudentFavoriteSubjects(string favoriteSubjects[], const int NUMBER_
 int getMaxRandomNumberForDifficulty(char difficultyLevel)
 {
     switch(difficultyLevel) {
-        case EASY:
-            return 10;
-        case MEDIUM:
-            return 100;
-        case HARD:
-            return 1000;
-        default:
-            return 10; // For invalid input/guard case
+    case EASY:
+        return 10;
+    case MEDIUM:
+        return 100;
+    case HARD:
+        return 1000;
+    default:
+        return 10; // For invalid input/guard case
     }
 }
 // For Unit Testing
@@ -798,204 +921,248 @@ int getMaxRandomNumberForDifficulty(char difficultyLevel)
     #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
     #include "doctest.h"
 
-    // New Updated Unit Tests
-    TEST_CASE("Equality operator - equal teachers") {
-        Teacher t1("Brown","Alice",35,HAPPY,"Physics",1,9,2010);
-        Teacher t2("White","Bob",40,NEUTRAL,"Physics",2,5,2015);
+// New Updated Unit Tests
+TEST_CASE("Equality operator - equal teachers") {
+    Teacher t1("Brown","Alice",35,HAPPY,"Physics",1,9,2010);
+    Teacher t2("White","Bob",40,NEUTRAL,"Physics",2,5,2015);
 
-        CHECK(t1 == t2);  // same teachingSubject → equal
-    }
+    CHECK(t1 == t2);  // same teachingSubject → equal
+}
 
-    TEST_CASE("Equality operator - not equal teachers") {
-        Teacher t1("Brown","Alice",35,HAPPY,"Physics",1,9,2010);
-        Teacher t2("White","Bob",40,NEUTRAL,"Math",2,5,2015);
+TEST_CASE("Equality operator - not equal teachers") {
+    Teacher t1("Brown","Alice",35,HAPPY,"Physics",1,9,2010);
+    Teacher t2("White","Bob",40,NEUTRAL,"Math",2,5,2015);
 
-        CHECK_FALSE(t1 == t2);
-    } 
-    TEST_CASE("<< operator works for Teacher") {
-        Teacher t("Brown","Alice",35,HAPPY,"Physics",1,9,2010);
+    CHECK_FALSE(t1 == t2);
+}
+TEST_CASE("<< operator works for Teacher") {
+    Teacher t("Brown","Alice",35,HAPPY,"Physics",1,9,2010);
 
-        std::ostringstream out;
-        out << t;
-        CHECK(out.str().find("Physics") != std::string::npos);
-    }
+    std::ostringstream out;
+    out << t;
+    CHECK(out.str().find("Physics") != std::string::npos);
+}
 
-    TEST_CASE("DynamicArray [] valid index") {
-        DynamicArray<Person> arr;
+TEST_CASE("DynamicArray [] valid index") {
+    DynamicArray<Person> arr;
 
-        Student* s = new Student("Smith","John",20,HAPPY,"S100",'A',95,"Math");
-        arr += s;
+    Student* s = new Student("Smith","John",20,HAPPY,"S100",'A',95,"Math");
+    arr += s;
 
-        CHECK(arr[0] == s);
-    }
-    TEST_CASE("DynamicArray += increases size") {
-        DynamicArray<Person> arr;
+    CHECK(arr[0] == s);
+}
+TEST_CASE("DynamicArray += increases size") {
+    DynamicArray<Person> arr;
 
-        arr += new Student("Smith","John",20,HAPPY,"S100",'A',95,"Math");
+    arr += new Student("Smith","John",20,HAPPY,"S100",'A',95,"Math");
 
-        CHECK(arr.getCurrentSize() == 1);
-    }
+    CHECK(arr.getCurrentSize() == 1);
+}
 
-    TEST_CASE("DynamicArray -= removes and shifts") {
-        DynamicArray<Person> arr;
+TEST_CASE("DynamicArray -= removes and shifts") {
+    DynamicArray<Person> arr;
 
-        Student* s1 = new Student("Smith","John",20,HAPPY,"S100",'A',95,"Math");
-        Student* s2 = new Student("Doe","Jane",22,NEUTRAL,"S200",'B',85,"Biology");
+    Student* s1 = new Student("Smith","John",20,HAPPY,"S100",'A',95,"Math");
+    Student* s2 = new Student("Doe","Jane",22,NEUTRAL,"S200",'B',85,"Biology");
 
-        arr += s1;
-        arr += s2;
+    arr += s1;
+    arr += s2;
 
-        arr -= 0;  // remove first
+    arr -= 0;  // remove first
 
-        CHECK(arr.getCurrentSize() == 1);
-        CHECK(arr[0] == s2);
-    }
+    CHECK(arr.getCurrentSize() == 1);
+    CHECK(arr[0] == s2);
+}
 
-    TEST_CASE("Function template findMax with int") {
-        CHECK(findMax(3,7,5) == 7);
-    }
+TEST_CASE("Function template findMax with int") {
+    CHECK(findMax(3,7,5) == 7);
+}
 
-    TEST_CASE("Function template findMax with double") {
-        CHECK(findMax(2.5,9.1,4.2) == doctest::Approx(9.1));
-    }
+TEST_CASE("Function template findMax with double") {
+    CHECK(findMax(2.5,9.1,4.2) == doctest::Approx(9.1));
+}
 
-    TEST_CASE("Class template DynamicArray resizing") {
-        DynamicArray<int> arr(1);
+TEST_CASE("Class template DynamicArray resizing") {
+    DynamicArray<int> arr(1);
 
-        arr += new int(10);
-        arr += new int(20);  // forces resize
+    arr += new int(10);
+    arr += new int(20);  // forces resize
 
-        CHECK(arr.getCurrentSize() == 2);
-        CHECK(*arr[0] == 10);
-        CHECK(*arr[1] == 20);
-    }
-    
-    TEST_CASE("DynamicArray operator[] - throws on empty array") {
+    CHECK(arr.getCurrentSize() == 2);
+    CHECK(*arr[0] == 10);
+    CHECK(*arr[1] == 20);
+}
+
+TEST_CASE("DynamicArray operator[] - throws on empty array") {
     DynamicArray<Person> arr;
     CHECK_THROWS_AS(arr[0], out_of_range);
-    }
+}
 
-    TEST_CASE("DynamicArray operator[] - throws on out of bounds index") {
-        DynamicArray<Person> arr;
-        arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
-        CHECK_THROWS_AS(arr[5], out_of_range);
-    }
+TEST_CASE("DynamicArray operator[] - throws on out of bounds index") {
+    DynamicArray<Person> arr;
+    arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
+    CHECK_THROWS_AS(arr[5], out_of_range);
+}
 
-    TEST_CASE("DynamicArray operator[] - throws on negative index") {
-        DynamicArray<Person> arr;
-        arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
-        CHECK_THROWS_AS(arr[-1], out_of_range);
-    }
+TEST_CASE("DynamicArray operator[] - throws on negative index") {
+    DynamicArray<Person> arr;
+    arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
+    CHECK_THROWS_AS(arr[-1], out_of_range);
+}
 
-    TEST_CASE("DynamicArray operator[] - no throw on valid index") {
-        DynamicArray<Person> arr;
-        arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
-        CHECK_NOTHROW(arr[0]);
-    }
+TEST_CASE("DynamicArray operator[] - no throw on valid index") {
+    DynamicArray<Person> arr;
+    arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
+    CHECK_NOTHROW(arr[0]);
+}
 
-    // ===== DynamicArray operator-= Tests =====
+// ===== DynamicArray operator-= Tests =====
 
-    TEST_CASE("DynamicArray operator-= throws on empty array") {
-        DynamicArray<Person> arr;
-        CHECK_THROWS_AS((arr -= 0), out_of_range);
-    }
+TEST_CASE("DynamicArray operator-= throws on empty array") {
+    DynamicArray<Person> arr;
+    CHECK_THROWS_AS((arr -= 0), out_of_range);
+}
 
-    TEST_CASE("DynamicArray operator-= throws on invalid index") {
-        DynamicArray<Person> arr;
-        arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
-        CHECK_THROWS_AS((arr -= 5), out_of_range);
-    }
+TEST_CASE("DynamicArray operator-= throws on invalid index") {
+    DynamicArray<Person> arr;
+    arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
+    CHECK_THROWS_AS((arr -= 5), out_of_range);
+}
 
-    TEST_CASE("DynamicArray operator-= throws on negative index") {
-        DynamicArray<Person> arr;
-        arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
-        CHECK_THROWS_AS((arr -= -1), out_of_range);
-    }
+TEST_CASE("DynamicArray operator-= throws on negative index") {
+    DynamicArray<Person> arr;
+    arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
+    CHECK_THROWS_AS((arr -= -1), out_of_range);
+}
 
-    TEST_CASE("DynamicArray operator-= no throw on valid index") {
-        DynamicArray<Person> arr;
-        arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
-        CHECK_NOTHROW((arr -= 0));
-    }
-    // Test cases for the recursive function calculateYearsOfExperience
-    TEST_CASE("Checking for valid input"){
-        Teacher t1("Brown", "Alice", 35, HAPPY, "Physics", 1, 9, 2010);
-        CHECK(t1.calculateYearsOfExperience(2026) == 16);
-    }
-    TEST_CASE("Checking for invalid input"){
-        Teacher t1("John", "Bob", 25, HAPPY, "Biology", 1, 9, 2030);
-        CHECK(t1.calculateYearsOfExperience(2026) == 0);
-    }
-    TEST_CASE("Bubble Sort on an Empty Vector") {
-        Student s1;
-        s1.bubbleSortScores();
-        CHECK(s1.getNumberOfScores() == 0);
-    }
+TEST_CASE("DynamicArray operator-= no throw on valid index") {
+    DynamicArray<Person> arr;
+    arr += new Student("Smith", "John", 20, HAPPY, "S100", 'A', 95, "Math");
+    CHECK_NOTHROW((arr -= 0));
+}
+// Test cases for the recursive function calculateYearsOfExperience
+TEST_CASE("Checking for valid input"){
+    Teacher t1("Brown", "Alice", 35, HAPPY, "Physics", 1, 9, 2010);
+    CHECK(t1.calculateYearsOfExperience(2026) == 16);
+}
+TEST_CASE("Checking for invalid input"){
+    Teacher t1("John", "Bob", 25, HAPPY, "Biology", 1, 9, 2030);
+    CHECK(t1.calculateYearsOfExperience(2026) == 0);
+}
+TEST_CASE("Bubble Sort on an Empty Vector") {
+    Student s1;
+    s1.bubbleSortScores();
+    CHECK(s1.getNumberOfScores() == 0);
+}
 
-    TEST_CASE("Bubble sort on a single element vector") {
-        Student s1;
-        s1.addTestScores(75);
-        s1.bubbleSortScores();
-        CHECK(s1.getScoreAt(0) == 75);
+TEST_CASE("Bubble sort on a single element vector") {
+    Student s1;
+    s1.addTestScores(75);
+    s1.bubbleSortScores();
+    CHECK(s1.getScoreAt(0) == 75);
+}
+TEST_CASE("Bubble sort on a multiple elements vector") {
+    Student s1;
+    s1.addTestScores(75);
+    s1.addTestScores(30);
+    s1.addTestScores(55);
+    s1.addTestScores(90);
+    s1.bubbleSortScores();
+    vector<int> expected = {30, 55, 75, 90};
+    for (int i = 0; i < s1.getNumberOfScores(); i++) {
+        CHECK(s1.getScoreAt(i) == expected[i]);
     }
-    TEST_CASE("Bubble sort on a multiple elements vector") {
-        Student s1;
-        s1.addTestScores(75);
-        s1.addTestScores(30);
-        s1.addTestScores(55);
-        s1.addTestScores(90);
-        s1.bubbleSortScores();
-        vector<int> expected = {30, 55, 75, 90};
-        for (int i = 0; i < s1.getNumberOfScores(); i++) {
-            CHECK(s1.getScoreAt(i) == expected[i]);
-        }
+}
+TEST_CASE("Linear search for element in vector") {
+    Student s1;
+    s1.addTestScores(65);
+    s1.addTestScores(75);
+    s1.addTestScores(85);
+    s1.addTestScores(90);
+
+    CHECK(s1.linearSearchScores(85) == 2);
+    CHECK(s1.linearSearchScores(100) == -1);
+    CHECK(s1.linearSearchScores(65) == 0);
+}
+TEST_CASE("Binary search for element in unsorted vector") {
+    Student s1;
+    s1.addTestScores(85);
+    s1.addTestScores(65);
+    s1.addTestScores(90);
+    s1.addTestScores(75);
+
+    // binarySearch automatically sorts first
+    CHECK(s1.binarySearchScores(85) == 2);
+    CHECK(s1.binarySearchScores(65) == 0);
+    CHECK(s1.binarySearchScores(100) == -1);
+}
+
+TEST_CASE("Unorderd Linked List Test for Teacher Objects"){
+    UnorderedLinkedList<Teacher> teacherList;
+
+    Teacher t1("Smith", "John", 40, HAPPY, "Math", 15, 8, 2010);
+    Teacher t2("Doe", "Jane", 35, SAD, "Science", 20, 6, 2015);
+    Teacher t3("Brown", "Alice", 30, NEUTRAL, "History", 1, 1, 2020);
+    teacherList.insertLast(t1);
+    teacherList.insertLast(t2);
+    teacherList.insertLast(t3);
+
+    CHECK(teacherList.search(t1) == true);
+    CHECK(teacherList.search(t2)== true);
+    CHECK(teacherList.search(t3)== true);
+
+    Teacher t4("White", "Bob", 45, SAD, "Art", 10, 10, 2005);
+    CHECK(teacherList.search(t4)== false);
+
+    SUBCASE("Delete a teacher and check if it's removed"){
+        teacherList.deleteNode(t2);
+        CHECK(teacherList.search(t2) == false);
     }
-    TEST_CASE("Linear search for element in vector") {
-        Student s1;
-        s1.addTestScores(65);
-        s1.addTestScores(75);
-        s1.addTestScores(85);
-        s1.addTestScores(90);
-    
-        CHECK(s1.linearSearchScores(85) == 2);
-        CHECK(s1.linearSearchScores(100) == -1);
-        CHECK(s1.linearSearchScores(65) == 0);
-    }
-    TEST_CASE("Binary search for element in unsorted vector") {
-        Student s1;
-        s1.addTestScores(85);
-        s1.addTestScores(65);
-        s1.addTestScores(90);
-        s1.addTestScores(75);
-        
-        // binarySearch automatically sorts first
-        CHECK(s1.binarySearchScores(85) == 2);
-        CHECK(s1.binarySearchScores(65) == 0);
-        CHECK(s1.binarySearchScores(100) == -1); 
-    }
+}
 
-    TEST_CASE("Unorderd Linked List Test for Teacher Objects"){
-        UnorderedLinkedList<Teacher> teacherList;
+TEST_CASE("Stack push and top") {
+    Stack<int> s(2);
+    s.push(10);
+    s.push(20);
+    CHECK(s.top() == 20);
+}
 
-        Teacher t1("Smith", "John", 40, HAPPY, "Math", 15, 8, 2010);
-        Teacher t2("Doe", "Jane", 35, SAD, "Science", 20, 6, 2015);
-        Teacher t3("Brown", "Alice", 30, NEUTRAL, "History", 1, 1, 2020);
-        teacherList.insertLast(t1);
-        teacherList.insertLast(t2);
-        teacherList.insertLast(t3);
+TEST_CASE("Stack pop") {
+    Stack<int> s;
+    s.push(5);
+    s.pop();
+    CHECK(s.isEmpty() == true);
+}
 
-        CHECK(teacherList.search(t1) == true);
-        CHECK(teacherList.search(t2)== true);
-        CHECK(teacherList.search(t3)== true);
+TEST_CASE("Stack underflow") {
+    Stack<int> s;
+    CHECK_THROWS_AS(s.pop(), underflow_error);
+}
 
-        Teacher t4("White", "Bob", 45, SAD, "Art", 10, 10, 2005);
-        CHECK(teacherList.search(t4)== false);
+TEST_CASE("Stack overflow") {
+    Stack<int> s(1);
+    s.push(1);
+    CHECK_THROWS_AS(s.push(2), overflow_error);
+}
 
-        SUBCASE("Delete a teacher and check if it's removed"){
-            teacherList.deleteNode(t2);
-            CHECK(teacherList.search(t2) == false);
-        }
-    }
+TEST_CASE("Queue enqueue and front") {
+    Queue<int> q;
+    q.enqueue(10);
+    q.enqueue(20);
+    CHECK(q.front() == 10);
+}
+
+TEST_CASE("Queue dequeue") {
+    Queue<int> q;
+    q.enqueue(10);
+    q.dequeue();
+    CHECK(q.isEmpty() == true);
+}
+
+TEST_CASE("Queue underflow") {
+    Queue<int> q;
+    CHECK_THROWS_AS(q.dequeue(), underflow_error);
+}
 
 #endif
 
@@ -1008,7 +1175,7 @@ int main(){
     // Testing Purpose
     //cout << *person1 << endl; // Using the overloaded << operator by dereferencing the pointer
     //person1->toStream(cout); // Pointer calling the virtual function
-    
+
     // Calling the function which displays a welcome banner to the user
     displayWelcomeBanner();
 
@@ -1020,7 +1187,7 @@ int main(){
     //Person p;
     // ----------------
 
-    
+
     // Calling the 'Collect User Info' function to get the user's input
     collectUserInfo(userData);
 
@@ -1119,7 +1286,31 @@ int main(){
     cout << endl;
     teacher1.print();
     cout << endl;
-    
+
+    // Proving Stakcs & Queues is working
+    cout << "----- Stacks & Queues Demonstration ----- \n" << endl;
+    Stack<int> scoreStack(3);
+
+    try {
+        scoreStack.push(10);
+        scoreStack.push(20);
+        scoreStack.push(30);
+
+        cout << "Top of Stack: " << scoreStack.top() << endl;
+
+        scoreStack.pop();
+        cout << "Top after pop: " << scoreStack.top() << endl;
+    }
+    catch (exception& e) {
+        cout << e.what() << endl;
+    }
+
+    School school;
+    school.addPerson(new Student("Smith", "John", 20, HAPPY, "S1", 'A', 90, "Math"));
+    school.addPerson(new Teacher("Doe", "Jane", 40, NEUTRAL, "Science", 1, 1, 2010));
+
+    school.processPeopleQueue();
+
     return 0;
 }
 #endif
@@ -1148,7 +1339,7 @@ void displayWelcomeBanner(){
 }
 
 // Function that collects and validates the data from the user
-void collectUserInfo(LearnerProfile& learner) 
+void collectUserInfo(LearnerProfile& learner)
 {
     // Prompts the user for inputs
 
@@ -1193,7 +1384,7 @@ void collectUserInfo(LearnerProfile& learner)
 
 // Function for Calculation
 double calculateEstimatedProblemsPerHour(LearnerProfile& learner){
-    
+
     // despite user entering 0 hours or negative hours, for unit testing purpose, we handle it here to avoid division by zero or negative hours
     if (learner.hoursSpentStudyingPerWeek <=0){
         learner.hoursSpentStudyingPerWeek = 1; // setting it to 1 by default to avoid division by zero or negative hours
@@ -1203,7 +1394,7 @@ double calculateEstimatedProblemsPerHour(LearnerProfile& learner){
 
 // Function for Writing User's Input to an Output txt file
 void userInputReportFile(ofstream& userOutputFile, LearnerProfile& learner, double& estimatedProblemsPerHour, double testScores[], double& averageTestScores) {
-    
+
     userOutputFile.open("report.txt");
 
     userOutputFile << fixed << showpoint << setprecision(2);
@@ -1231,18 +1422,18 @@ void mathQuiz(int& noOfCorrectAnswers, char quizDifficultyLevel) {
     char mathOperator;
 
     switch(quizDifficultyLevel) {
-        case EASY:
-            randomNum1 = (rand() % 10) + 1;
-            randomNum2 = (rand() % 10) + 1;
-            break;
-        case MEDIUM:
-            randomNum1 = (rand() % 100) + 1;
-            randomNum2 = (rand() % 100) + 1;
-            break;
-        case HARD:
-            randomNum1 = (rand() % 1000) + 1;
-            randomNum2 = (rand() % 1000) + 1;
-            break;
+    case EASY:
+        randomNum1 = (rand() % 10) + 1;
+        randomNum2 = (rand() % 10) + 1;
+        break;
+    case MEDIUM:
+        randomNum1 = (rand() % 100) + 1;
+        randomNum2 = (rand() % 100) + 1;
+        break;
+    case HARD:
+        randomNum1 = (rand() % 1000) + 1;
+        randomNum2 = (rand() % 1000) + 1;
+        break;
     }
 
     cout << "Enter a math operator (+, -, *, /, %): ";
@@ -1252,25 +1443,25 @@ void mathQuiz(int& noOfCorrectAnswers, char quizDifficultyLevel) {
         cin.ignore(1000, '\n');
         cout << "Invalid Input. Please Enter a correct Math Operator: ";
     }
-        cout << endl;
+    cout << endl;
 
-        switch(mathOperator) {
-            case '+':
-            result = randomNum1 + randomNum2;
-            break;
-        case '-':
-            result = randomNum1 - randomNum2;
-            break;
-        case '*':
-            result =randomNum1 * randomNum2;
-            break;
-        case '/':
-            result = randomNum1 / randomNum2;
-            break;
-        case '%':
-            result = randomNum1 % randomNum2;
-            break;
-        }
+    switch(mathOperator) {
+    case '+':
+        result = randomNum1 + randomNum2;
+        break;
+    case '-':
+        result = randomNum1 - randomNum2;
+        break;
+    case '*':
+        result =randomNum1 * randomNum2;
+        break;
+    case '/':
+        result = randomNum1 / randomNum2;
+        break;
+    case '%':
+        result = randomNum1 % randomNum2;
+        break;
+    }
 
     cout << randomNum1 << " " << mathOperator << " " << randomNum2 << " = ";
     cin >> userAnswer;
@@ -1364,15 +1555,15 @@ void Person::print() const {
     cout << "Age: " << age << endl;
     cout << "Happiness Level with Life: ";
     switch (happinessLevel) {
-        case SAD:
-            cout << "Sad" << endl;
-            break;
-        case NEUTRAL:
-            cout << "Neutral" << endl;
-            break;
-        case HAPPY:
-            cout << "Happy" << endl;
-            break; 
+    case SAD:
+        cout << "Sad" << endl;
+        break;
+    case NEUTRAL:
+        cout << "Neutral" << endl;
+        break;
+    case HAPPY:
+        cout << "Happy" << endl;
+        break;
     }
 }
 
@@ -1438,7 +1629,7 @@ int Student::binarySearchScores(int keyScore){
     // Converting the unsigned int to an int value
     int length = static_cast<int>(vectStudentTestScores.size());
 
-    
+
     int low = 0;
     int high = length - 1;
     int middle;
