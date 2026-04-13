@@ -1,7 +1,7 @@
 /*
 Author: Zakaria Rahman
 
-Date: March 29, 2026
+Date: April 05, 2026
 Description: This program collects user inputs and validates if they enter the correct input.
              Also, it demonstrates file handling by writing to a file. Additionally, it shows the usage
              of selection statements like if else statements and switch case statements. Furthermore,
@@ -14,6 +14,7 @@ Description: This program collects user inputs and validates if they enter the c
              This program also shows the use of recursion in programming.
              New: Use of vectors, implementation of sequential search, bubble sort, and binary search.
              New: Use of linked lists using class templates.
+             New: Use of stacks and queues.
 Course: ITCS 2550 (C++ Programming 2)
 */
 
