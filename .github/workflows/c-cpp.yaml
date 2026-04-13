@@ -14,7 +14,8 @@ jobs:
 
       - name: Build tests
         run: |
-          g++ -std=c++17 -DRUN_TESTS main.cpp -o tests
+          g++ --version
+          g++ -std=c++14 -O0 -g -D_DEBUG -Wall -Wextra -pedantic -I. main.cpp -o tests
 
       - name: Run tests
         run: |

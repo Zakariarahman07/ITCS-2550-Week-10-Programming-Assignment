@@ -31,11 +31,10 @@ Course: ITCS 2550 (C++ Programming 2)
 #include <exception>
 #include <cassert>
 #include <vector>
-
+#include <map>
+#include <sstream>
 
 using namespace std;
-
-
 
 // Enumeration Declaration
 enum difficultyLevel { EASY = 'E', MEDIUM = 'M', HARD = 'H'};
@@ -452,6 +451,7 @@ public:
     }
 
 };
+
 // Composition Class Date
 class Date {
     // Private Members
@@ -772,15 +772,58 @@ class School {
 private:
     // Calling an instance of the class template
     DynamicArray<Person> people;
-    // Public Members
+
+    // STL Map enhancement:
+    // This map provides meaningful lookup by a real-world key (full name), which is more useful than index-based access.
+    // It enhances the existing DynamicArray without rewriting ownership/memory logic.
+    map<string, const Person*> peopleDirectoryByFullName;
+
+    static string buildFullNameKey(const Person& p) {
+        return p.getFirstName() + " " + p.getLastName();
+    }
+
 public:
     // Default Constructor
     School():people(10) {
         // Initializing the dynamic array with size of 10
     }
-    // Adding a Person (Student or Teacher) to the School
+
+    // Insert — add a key-value pair to the map (performed alongside existing DynamicArray insertion).
     void addPerson(Person* p) {
-        people += p; // Using the overload += operator to add a person pointer
+        people += p; // existing storage (owns the pointer)
+        peopleDirectoryByFullName[buildFullNameKey(*p)] = p; // map enhancement for lookup by name
+    }
+
+    // Lookup — retrieve a value by key.
+    bool tryGetPersonByFullName(const string& fullName, const Person*& outPerson) const {
+        const auto it = peopleDirectoryByFullName.find(fullName);
+        if (it == peopleDirectoryByFullName.end()) {
+            outPerson = nullptr;
+            return false;
+        }
+
+        outPerson = it->second;
+        return true;
+    }
+
+    // Delete — remove a key-value pair from the map.
+    // Note: this removes the DIRECTORY entry. The owned object is still managed by DynamicArray (index-based removal).
+    bool removePersonDirectoryEntryByFullName(const string& fullName) {
+        const auto erased = peopleDirectoryByFullName.erase(fullName);
+        return erased > 0;
+    }
+
+    // Iterate — traverse and display all key-value pairs in the map.
+    void printPeopleDirectoryByFullName(ostream& out) const {
+        for (const auto& pair : peopleDirectoryByFullName) {
+            out << pair.first << " -> ";
+            pair.second->toStream(out);
+            out << "\n";
+        }
+    }
+
+    int getDirectorySize() const {
+        return static_cast<int>(peopleDirectoryByFullName.size());
     }
 
     // Removing a Person from school
@@ -846,7 +889,6 @@ public:
     }
 };
 
-
 // Function Templates for finding the maximum of three values
 // Type can be any data type (int, double, float, char etc.)
 template <class T>
@@ -862,6 +904,7 @@ T findMax(T a, T b, T c)
         return c;
     }
 }
+
 // Struct Definition (Global Scope)
 struct LearnerProfile {
     string name;
@@ -870,7 +913,6 @@ struct LearnerProfile {
     int confidenceLevel;
     double hoursSpentStudyingPerWeek;
 };
-
 
 // Declaring a constant for number of questions asked on the quiz
 const int NO_OF_QUESTIONS = 5;
@@ -884,23 +926,14 @@ const string RESET = "\033[0m";
 const int NUMBER_OF_TEST_SCORES = 5;
 
 // Function prototypes
-
 void changeConsoleTextColor(string color);
-
 void displayWelcomeBanner();
-
 void collectUserInfo(LearnerProfile& learner);
-
 double calculateEstimatedProblemsPerHour(LearnerProfile& learner);
-
 void userInputReportFile(ofstream& userOutputFile, LearnerProfile& learner, double& estimatedProblemsPerHour, double testScores[], double& averageTestScores);
-
 double averageTestScores(double testScorees[], int size);
-
 void mathQuiz(int& noOfCorrectAnswers, char quizDifficultyLevel);
-
 void quizFeedback(int& confidenceLevel, int& noOfCorrectAnswers);
-
 void displayStudentFavoriteSubjects(string favoriteSubjects[], const int NUMBER_OF_FAVORITE_SUBJECTS);
 
 // Helper Function for Unit Testing for ENUM Decision Logic
@@ -917,12 +950,71 @@ int getMaxRandomNumberForDifficulty(char difficultyLevel)
         return 10; // For invalid input/guard case
     }
 }
+
 // For Unit Testing
-#ifdef RUN_TESTS
+#ifdef _DEBUG
     #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
     #include "doctest.h"
 
-// New Updated Unit Tests
+// ===== New STL Map tests =====
+
+TEST_CASE("School map insert + lookup by full name works") {
+    School school;
+
+    school.addPerson(new Student("Smith", "John", 20, HAPPY, "S1", 'A', 90, "Math"));
+    school.addPerson(new Teacher("Doe", "Jane", 40, NEUTRAL, "Science", 1, 1, 2010));
+
+    const Person* p = nullptr;
+    CHECK(school.tryGetPersonByFullName("John Smith", p) == true);
+    CHECK(p != nullptr);
+    CHECK(p->getSubject() == "Math");
+
+    CHECK(school.tryGetPersonByFullName("Jane Doe", p) == true);
+    CHECK(p != nullptr);
+    CHECK(p->getSubject() == "Science");
+}
+
+TEST_CASE("School map lookup missing key returns false and nullptr") {
+    School school;
+    school.addPerson(new Student("Smith", "John", 20, HAPPY, "S1", 'A', 90, "Math"));
+
+    const Person* p = reinterpret_cast<const Person*>(0x1);
+    CHECK(school.tryGetPersonByFullName("Missing Person", p) == false);
+    CHECK(p == nullptr);
+}
+
+TEST_CASE("School map delete existing key returns true") {
+    School school;
+    school.addPerson(new Student("Smith", "John", 20, HAPPY, "S1", 'A', 90, "Math"));
+
+    CHECK(school.getDirectorySize() == 1);
+    CHECK(school.removePersonDirectoryEntryByFullName("John Smith") == true);
+    CHECK(school.getDirectorySize() == 0);
+}
+
+TEST_CASE("School map delete missing key returns false") {
+    School school;
+    school.addPerson(new Student("Smith", "John", 20, HAPPY, "S1", 'A', 90, "Math"));
+
+    CHECK(school.removePersonDirectoryEntryByFullName("Jane Doe") == false);
+    CHECK(school.getDirectorySize() == 1);
+}
+
+TEST_CASE("School map iterate prints all key-value pairs") {
+    School school;
+    school.addPerson(new Student("Smith", "John", 20, HAPPY, "S1", 'A', 90, "Math"));
+    school.addPerson(new Teacher("Doe", "Jane", 40, NEUTRAL, "Science", 1, 1, 2010));
+
+    ostringstream out;
+    school.printPeopleDirectoryByFullName(out);
+
+    const string s = out.str();
+    CHECK(s.find("John Smith ->") != string::npos);
+    CHECK(s.find("Jane Doe ->") != string::npos);
+}
+
+// ===== Existing tests (kept) =====
+
 TEST_CASE("Equality operator - equal teachers") {
     Teacher t1("Brown","Alice",35,HAPPY,"Physics",1,9,2010);
     Teacher t2("White","Bob",40,NEUTRAL,"Physics",2,5,2015);
